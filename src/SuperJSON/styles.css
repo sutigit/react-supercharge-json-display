@@ -1,6 +1,5 @@
 #super-json-display {
     font-family: monospace;
-    line-height: 2rem;
     font-weight: 300;
     font-size: 1rem;
 
@@ -15,16 +14,15 @@
 }
 
 .sjd-row {
+    height: 2rem;
+    max-height: 2rem;
     display: flex;
     align-items: center;
+    overflow: hidden;
 }
 
 .sjd-indent {
-    border-left: 1px solid #333;
-}
-
-.hover:hover {
-    background-color: #333333;
+    border-left: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 .sjd-key {
@@ -43,12 +41,20 @@
     color: #87cefa;
 }
 
-.sjd-punct {
-    color: #808080;
+.sjd-boolean {
+    color: #87cefa;
 }
 
-.sjd-line-number {
-    color: #555;
+.sjd-null {
+    color: #87cefa;
+}
+
+.sjd-punct {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.sjd-row-number {
+    color: rgba(255, 255, 255, 0.2);
     margin-right: 2rem;
     display: flex;
     justify-content: flex-end;
@@ -57,9 +63,16 @@
 }
 
 .sjd-string-line {
-    height: 2rem;
+    height: 100%;
     display: flex;
     align-items: center;
+}
+
+.sjd-add-on {
+    color: rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
 .sjd-warning {

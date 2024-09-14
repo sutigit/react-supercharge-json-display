@@ -1,4 +1,4 @@
-import { isKey, isString, isNumber, isBracket, isComma, breakString } from '../lib/utils'
+import { isKey, isString, isNumber, isBoolean, isBracket, isComma, isNull, breakString } from '../lib/utils'
 
 const indentation = 4
 
@@ -27,6 +27,12 @@ const createElement = (index: number, stringLine: string, depth: number): JSX.El
             const hlElement = <span key={index} className='sjd-number'>{chunk}</span>;
             highlightedElements.push(hlElement);
 
+        } else if (isBoolean(chunk)) {
+
+            // Color json boolean values
+            const hlElement = <span key={index} className='sjd-boolean'>{chunk}</span>;
+            highlightedElements.push(hlElement);
+
         } else if (isBracket(chunk)) {
 
             // Color json brackets
@@ -38,6 +44,12 @@ const createElement = (index: number, stringLine: string, depth: number): JSX.El
             // Color json commas
             const hlElement = <span key={index} className='sjd-punct'>{chunk}</span>;
             highlightedElements.push(hlElement);
+            
+        } else if (isNull(chunk)) {
+
+            // Color json null values
+            const hlElement = <span key={index} className='sjd-null'>{chunk}</span>;
+            highlightedElements.push(hlElement);
         }
     });
 
@@ -47,13 +59,11 @@ const createElement = (index: number, stringLine: string, depth: number): JSX.El
     ));
 
     return (
-        <div key={index} className="hover sjd-string-line">
+        <div key={index} className="sjd-string-line">
             {spaces}{highlightedElements}
         </div>
     )
 }
-
-
 
 
 export const createElements = (jsonData: any): JSX.Element[] => {

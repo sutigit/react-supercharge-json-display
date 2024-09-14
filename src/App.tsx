@@ -8,7 +8,7 @@ export default function App() {
     <main style={{ padding: 50 }}>
       <JSONDisplay
         json={data}>
-        
+          
       </JSONDisplay>
     </main>
   )
