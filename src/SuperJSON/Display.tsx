@@ -35,12 +35,14 @@ export default function SJDisplay(
         options?: any,
     }): JSX.Element {
 
+    const [rowsInitiated, setRowsInitiated] = useState<boolean>(false)
     const [config, setConfig] = useState<Config>(defaultOptions)
     const [focusedRow, setFocusedRow] = useState<number | null>(null)
     const [rowElementData, setRowElementData] = useState<RowElementData[]>([])
     const [collapseRanges, setCollapseRanges] = useState<CollapseRangeObject<string>>({})
 
 
+    // Map JSON data to JSX elements
     useEffect(() => {
         if (options) {
             setConfig({
@@ -52,8 +54,9 @@ export default function SJDisplay(
         setRowElementData(createJsonRow(json, config))
     }, [options])
 
+    // Map collapse ranges
     useEffect(() => {
-        if (rowElementData.length === 0) return
+        if (rowsInitiated || rowElementData.length === 0) return
 
         const collectedCollapseRanges: CollapseRangeObject<string> = {}
         const currentCollapseRangeStartIndexes: number[] = [];
@@ -74,20 +77,42 @@ export default function SJDisplay(
         })
 
         setCollapseRanges(collectedCollapseRanges)
+        setRowsInitiated(true)
     }, [rowElementData])
 
     useEffect(() => {
         if (Object.keys(collapseRanges).length === 0) return
 
+        let currentCollapseRange: number[] = []
+
+        const updatedRowElementData = rowElementData.map(({ rowElement, type, depth }, i) => {
+
+            const collapseRange = collapseRanges[i.toString()]
+
+            if (collapseRange?.end) {
+                console.log('collapseRange', i, collapseRange)                
+            }
+
+            return {
+                rowElement: rowElement,
+                type: type,
+                depth: depth,
+                collapsed: false
+            }
+        })
+
+        setRowElementData(updatedRowElementData)
     }, [collapseRanges])
 
     const handleCollapse = (collapseIndex: number) => {
-        const collapseRange = collapseRanges[collapseIndex.toString()];
-        if (collapseRange.end !== null) {
-            for (let i = collapseIndex+1; i < collapseRange.end; i++) {
-                rowElementData[i].collapsed = !rowElementData[i].collapsed;
+        const updatedCollapseRange = collapseRanges[collapseIndex.toString()]
+        setCollapseRanges({
+            ...collapseRanges,
+            [collapseIndex.toString()]: {
+                ...updatedCollapseRange,
+                collapsed: true
             }
-        }
+        })
     }
 
     return (
