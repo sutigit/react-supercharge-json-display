@@ -92,7 +92,9 @@ const createElement = (index: number, stringLine: string, depth: number, config:
                     style={{ color: config.highlightColors.key }}
                     className='sjd-key'>
                     {chunk.slice(0, -2)}
-                    <span className='sjd-punct'>: </span>
+                    <span
+                        style={{ color: config.highlightColors.punctuation }}
+                        className='sjd-punct'>: </span>
                 </span>;
 
             highlightedElements.push(hlElement);

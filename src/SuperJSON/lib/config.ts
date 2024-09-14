@@ -47,8 +47,8 @@ export const defaultOptions = {
     colors: {
         background: '#242424',
         focusedRow: 'rgba(255, 255, 255, 0.02)',
-        rowNumber: 'rgba(255, 255, 255, 0.15)',
-        indentLines: 'rgba(255, 255, 255, 0.07)',
+        rowNumber: 'rgba(255, 255, 255, 0.18)',
+        indentLines: 'rgba(255, 255, 255, 0.08)',
         warning: '#FF6347',
     },
     highlightColors: {
