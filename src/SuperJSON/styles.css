@@ -1,0 +1,74 @@
+#super-json-display {
+    font-family: monospace;
+    line-height: 2rem;
+    font-weight: 300;
+    font-size: 1rem;
+
+    color-scheme: light dark;
+    color: rgba(255, 255, 255, 0.87);
+    background-color: #242424;
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.sjd-row {
+    display: flex;
+    align-items: center;
+}
+
+.sjd-indent {
+    border-left: 1px solid #333;
+}
+
+.hover:hover {
+    background-color: #333333;
+}
+
+.sjd-key {
+    color: #f5f5f5;
+}
+
+.sjd-bracket {
+    color: #ff7f50;
+}
+
+.sjd-string {
+    color: #deb887;
+}
+
+.sjd-number {
+    color: #87cefa;
+}
+
+.sjd-punct {
+    color: #808080;
+}
+
+.sjd-line-number {
+    color: #555;
+    margin-right: 2rem;
+    display: flex;
+    justify-content: flex-end;
+    min-width: 2rem;
+    user-select: none;
+}
+
+.sjd-string-line {
+    height: 2rem;
+    display: flex;
+    align-items: center;
+}
+
+.sjd-warning {
+    color: #ff6347;
+}
+
+#super-json-display span {
+    white-space: pre-wrap;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}

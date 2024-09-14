@@ -1,0 +1,117 @@
+{
+    "count": 6,
+    "results": [
+        {
+            "id": 1,
+            "name": "The Shire",
+            "capital": "https://lotrapi.co/api/v1/cities/3",
+            "founded_date": "TA 1601",
+            "type": "Hobbit Realm",
+            "location": "Central Eriador",
+            "inhabitants": [
+                "Hobbits"
+            ],
+            "characters": [
+                "https://lotrapi.co/api/v1/characters/1",
+                "https://lotrapi.co/api/v1/characters/2",
+                "https://lotrapi.co/api/v1/characters/4",
+                "https://lotrapi.co/api/v1/characters/6",
+                "https://lotrapi.co/api/v1/characters/7"
+            ],
+            "url": "https://lotrapi.co/api/v1/realms/1"
+        },
+        {
+            "id": 2,
+            "name": "Arnor",
+            "capital": "https://lotrapi.co/api/v1/cities/2",
+            "founded_date": "SA 3320",
+            "type": "Kingdom",
+            "location": "Eriador, except Eregion",
+            "inhabitants": [
+                "Númenóreans",
+                "Dúnedain",
+                "Arnorians",
+                "Elves",
+                "Hobbits"
+            ],
+            "characters": [
+                "https://lotrapi.co/api/v1/characters/5"
+            ],
+            "url": "https://lotrapi.co/api/v1/realms/2"
+        },
+        {
+            "id": 3,
+            "name": "Valinor",
+            "capital": "https://lotrapi.co/api/v1/cities/4",
+            "founded_date": "Unknown",
+            "type": "Undying Lands",
+            "location": "West of the Pelóri",
+            "inhabitants": [
+                "Valar",
+                "Maiar"
+            ],
+            "characters": [
+                "https://lotrapi.co/api/v1/characters/3"
+            ],
+            "url": "https://lotrapi.co/api/v1/realms/3"
+        },
+        {
+            "id": 5,
+            "name": "Woodland Realm",
+            "capital": "https://lotrapi.co/api/v1/cities/5",
+            "founded_date": "SA 750",
+            "type": "Elven Kingdom",
+            "location": "Greenwood the Great",
+            "inhabitants": [
+                "Silvan Elves",
+                "Sindar Elves"
+            ],
+            "characters": [
+                "https://lotrapi.co/api/v1/characters/8"
+            ],
+            "url": "https://lotrapi.co/api/v1/realms/5"
+        },
+        {
+            "id": 6,
+            "name": "Lonely Mountain",
+            "capital": "https://lotrapi.co/api/v1/cities/6",
+            "founded_date": "TA 1999",
+            "type": "Dwarven Kingdom",
+            "location": "Northern Rhovanion",
+            "inhabitants": [
+                "Dwarves"
+            ],
+            "characters": [
+                "https://lotrapi.co/api/v1/characters/9"
+            ],
+            "url": "https://lotrapi.co/api/v1/realms/6"
+        },
+        {
+            "id": 7,
+            "name": "Anórien",
+            "capital": "https://lotrapi.co/api/v1/cities/7",
+            "founded_date": "unknown",
+            "type": "Human Realm",
+            "location": "Northern edge of the White Mountains",
+            "inhabitants": [
+                "Númenóreans",
+                "Dúnedain",
+                "Gondorians",
+                "Wood-elves",
+                "Sindar",
+                "Nandor",
+                "Silvan Elves"
+            ],
+            "characters": [
+                "https://lotrapi.co/api/v1/characters/10"
+            ],
+            "url": "https://lotrapi.co/api/v1/realms/7"
+        }
+    ],
+    "links": {
+        "first": "https://lotrapi.co/api/v1/realms?page=1",
+        "last": "https://lotrapi.co/api/v1/realms?page=1",
+        "prev": null,
+        "next": null
+    }
+}
