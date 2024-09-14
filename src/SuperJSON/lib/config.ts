@@ -1,6 +1,6 @@
 export interface Config {
     indentSpace: number,
-    collapsible: boolean, //  not implemented
+    collapsible: boolean, //  not implemented yet
     showLineNumbers: boolean,
     showIndentGuides: boolean,
     layout: {
@@ -15,6 +15,8 @@ export interface Config {
     colors: {
         background: string,
         focusedRow: string,
+        rowNumber: string,
+        indentLines: string,
         warning: string,
     },
     highlightColors: { 
@@ -45,6 +47,8 @@ export const defaultOptions = {
     colors: {
         background: '#242424',
         focusedRow: 'rgba(255, 255, 255, 0.02)',
+        rowNumber: 'rgba(255, 255, 255, 0.15)',
+        indentLines: 'rgba(255, 255, 255, 0.07)',
         warning: '#FF6347',
     },
     highlightColors: {

@@ -54,7 +54,14 @@ export default function SJDisplay(
                         }}>
 
                         {/* Line number */}
-                        <div className='sjd-row-number' style={{ visibility: config.showLineNumbers ? 'visible' : 'hidden' }}>{i + 1}</div>
+                        <div
+                            className='sjd-row-number'
+                            style={{
+                                visibility: config.showLineNumbers ? 'visible' : 'hidden',
+                                color: config.colors.rowNumber,
+                            }}>
+                            {i + 1}
+                        </div>
 
                         {/* Line content */}
                         {element}

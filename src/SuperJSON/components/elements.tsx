@@ -180,7 +180,11 @@ const createElement = (index: number, stringLine: string, depth: number, config:
     // Add indentation to each line according to the depth
     const spaces = Array.from({ length: depth }, (_, index) => (
         <span
-            key={index} style={{ borderLeft: config.showIndentGuides ? '1px solid rgba(255, 255, 255, 0.07)'  : 'none' }}>
+            key={index}
+            style={{
+                borderLeft: config.showIndentGuides ? '1px solid' : 'none',
+                borderColor: config.colors.indentLines,
+            }}>
             {'\u00A0'.repeat(config.indentSpace)}
         </span>
     ));
