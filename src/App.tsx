@@ -1,15 +1,17 @@
 import data from './example_data/lotrapi.json'
 
-import JSONDisplay from "./SuperJSON/Display"
+import SjnDisplay from "./SuperJSON/Display"
+// import SjnRowAddOn from "./SuperJSON/RowAddon"
 
 export default function App() {
 
   return (
     <main style={{ padding: 50 }}>
-      <JSONDisplay
-        json={data}>
-          
-      </JSONDisplay>
+      <SjnDisplay json={data}>
+        {/* <SjnRowAddOn visibilityRules={}>
+            <p>Hello</p>
+        </SjnRowAddOn> */}
+      </SjnDisplay>
     </main>
   )
 };

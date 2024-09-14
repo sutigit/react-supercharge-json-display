@@ -49,10 +49,10 @@ export const defaultOptions = {
     colors: {
         background: '#242424',
         focusedRow: 'rgba(255, 255, 255, 0.02)',
-        rowNumber: 'rgba(255, 255, 255, 0.18)',
-        indentLines: 'rgba(255, 255, 255, 0.08)',
-        collapseButtonIcon: 'rgba(255, 255, 255, 0.24)',
-        collapseButtonBg: 'rgba(255, 255, 255, 0.08)',
+        rowNumber: 'rgba(255, 255, 255, 0.2)',
+        indentLines: 'rgba(255, 255, 255, 0.1)',
+        collapseButtonIcon: 'rgba(255, 255, 255, 0.25)',
+        collapseButtonBg: 'rgba(255, 255, 255, 0.1)',
         warning: '#FF6347',
     },
     highlightColors: {

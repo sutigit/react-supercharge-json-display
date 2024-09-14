@@ -4,7 +4,13 @@ import { isKey, isString, isNumber, isBoolean, isBracket, isComma, isNull, break
 interface RowElementData {
     rowElement: JSX.Element,
     type: string,
+    depth: number,
+    collapsed: boolean
 }
+
+type RowElementDataObject<Key extends string> = {
+    [key in Key]: RowElementData
+};
 
 export const createJsonRow = (jsonData: any, config: Config): RowElementData[] => {
 
@@ -18,6 +24,8 @@ export const createJsonRow = (jsonData: any, config: Config): RowElementData[] =
             {
                 rowElement: <p key="sjd-warning" style={{ color: config.colors.warning }}>Invalid JSON</p>,
                 type: 'warning',
+                depth: 0,
+                collapsed: false
             }
         ]
     }
@@ -41,9 +49,18 @@ export const createJsonRow = (jsonData: any, config: Config): RowElementData[] =
 
             if (prevChar === ',') {
 
+                let type = 'new-line'
+                if (stringLine[stringLine.length - 2] === '}') {
+                    type = 'closing-crlbr'
+                } else if (stringLine[stringLine.length - 2] === ']') {
+                    type = 'closing-sqbr'
+                }
+
                 const item = {
-                    rowElement: createElement(i, stringLine, depth, config),
-                    type: 'new-line',
+                    rowElement: createContent(i, stringLine, depth, config),
+                    type: type,
+                    depth: depth,
+                    collapsed: false
                 }
                 rowElementData.push(item)
                 stringLine = ''
@@ -53,8 +70,10 @@ export const createJsonRow = (jsonData: any, config: Config): RowElementData[] =
             if (prevChar === '[') {
 
                 const item = {
-                    rowElement: createElement(i, stringLine, depth, config),
+                    rowElement: createContent(i, stringLine, depth, config),
                     type: 'opening-sqbr',
+                    depth: depth,
+                    collapsed: false
                 }
                 rowElementData.push(item)
                 stringLine = ''
@@ -65,8 +84,10 @@ export const createJsonRow = (jsonData: any, config: Config): RowElementData[] =
             if (prevChar === ']') {
 
                 const item = {
-                    rowElement: createElement(i, stringLine, depth, config),
-                    type: 'ending-sqbr',
+                    rowElement: createContent(i, stringLine, depth, config),
+                    type: 'closing-sqbr',
+                    depth: depth,
+                    collapsed: false
                 }
                 rowElementData.push(item)
                 stringLine = ''
@@ -77,8 +98,10 @@ export const createJsonRow = (jsonData: any, config: Config): RowElementData[] =
             if (prevChar === '{') {
 
                 const item = {
-                    rowElement: createElement(i, stringLine, depth, config),
+                    rowElement: createContent(i, stringLine, depth, config),
                     type: 'opening-crlbr',
+                    depth: depth,
+                    collapsed: false
                 }
                 rowElementData.push(item)
                 stringLine = ''
@@ -89,8 +112,10 @@ export const createJsonRow = (jsonData: any, config: Config): RowElementData[] =
             if (prevChar === '}') {
 
                 const item = {
-                    rowElement: createElement(i, stringLine, depth, config),
-                    type: 'ending-crlbr',
+                    rowElement: createContent(i, stringLine, depth, config),
+                    type: 'closing-crlbr',
+                    depth: depth,
+                    collapsed: false
                 }
                 rowElementData.push(item)
                 stringLine = ''
@@ -101,8 +126,10 @@ export const createJsonRow = (jsonData: any, config: Config): RowElementData[] =
             if (prevChar !== ',') {
 
                 const item = {
-                    rowElement: createElement(i, stringLine, depth, config),
+                    rowElement: createContent(i, stringLine, depth, config),
                     type: 'neutral',
+                    depth: depth,
+                    collapsed: false
                 }
                 rowElementData.push(item)
                 stringLine = ''
@@ -115,7 +142,7 @@ export const createJsonRow = (jsonData: any, config: Config): RowElementData[] =
     return rowElementData
 }
 
-const createElement = (index: number, stringLine: string, depth: number, config: Config): JSX.Element => {
+const createContent = (index: number, stringLine: string, depth: number, config: Config): JSX.Element => {
 
     const highlightedElements: JSX.Element[] = []
     const chunks = breakString(stringLine)
