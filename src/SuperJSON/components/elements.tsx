@@ -1,72 +1,8 @@
+import { Config } from '../lib/config'
 import { isKey, isString, isNumber, isBoolean, isBracket, isComma, isNull, breakString } from '../lib/utils'
 
-const indentation = 4
 
-const createElement = (index: number, stringLine: string, depth: number): JSX.Element => {
-
-    const highlightedElements: JSX.Element[] = []
-    const chunks = breakString(stringLine)
-
-    chunks?.forEach((chunk, index) => {
-
-        if (isKey(chunk)) {
-
-            // Color json keys
-            const hlElement = <span key={index} className='sjd-key'>{chunk.slice(0, -2)}<span className='sjd-punct'>: </span></span>;
-            highlightedElements.push(hlElement);
-
-        } else if (isString(chunk)) {
-
-            // Color json string values
-            const hlElement = <span key={index} className='sjd-string'>{chunk}</span>;
-            highlightedElements.push(hlElement);
-
-        } else if (isNumber(chunk)) {
-
-            // Color json numbers
-            const hlElement = <span key={index} className='sjd-number'>{chunk}</span>;
-            highlightedElements.push(hlElement);
-
-        } else if (isBoolean(chunk)) {
-
-            // Color json boolean values
-            const hlElement = <span key={index} className='sjd-boolean'>{chunk}</span>;
-            highlightedElements.push(hlElement);
-
-        } else if (isBracket(chunk)) {
-
-            // Color json brackets
-            const hlElement = <span key={index} className='sjd-bracket'>{chunk}</span>;
-            highlightedElements.push(hlElement);
-
-        } else if (isComma(chunk)) {
-
-            // Color json commas
-            const hlElement = <span key={index} className='sjd-punct'>{chunk}</span>;
-            highlightedElements.push(hlElement);
-            
-        } else if (isNull(chunk)) {
-
-            // Color json null values
-            const hlElement = <span key={index} className='sjd-null'>{chunk}</span>;
-            highlightedElements.push(hlElement);
-        }
-    });
-
-    // Add indentation to each line according to the depth
-    const spaces = Array.from({ length: depth }, (_, index) => (
-        <span key={index} className='sjd-indent'>{'\u00A0'.repeat(indentation)}</span>
-    ));
-
-    return (
-        <div key={index} className="sjd-string-line">
-            {spaces}{highlightedElements}
-        </div>
-    )
-}
-
-
-export const createElements = (jsonData: any): JSX.Element[] => {
+export const createElements = (jsonData: any, config: Config): JSX.Element[] => {
 
     let jsonString = JSON.stringify(jsonData, null, 1)
 
@@ -74,7 +10,7 @@ export const createElements = (jsonData: any): JSX.Element[] => {
     try {
         JSON.parse(jsonString)
     } catch (error) {
-        return [<p key="sjd-warning">Invalid JSON</p>]
+        return [<p key="sjd-warning" style={{ color: config.colors.warning }}>Invalid JSON</p>]
     }
 
     // Prepare the string
@@ -95,41 +31,41 @@ export const createElements = (jsonData: any): JSX.Element[] => {
         if (currentChar === '\n') {
 
             if (prevChar === ',') {
-                htmlElements.push(createElement(i, stringLine, depth))
+                htmlElements.push(createElement(i, stringLine, depth, config))
                 stringLine = ''
                 continue
             }
 
             if (prevChar === '[') {
-                htmlElements.push(createElement(i, stringLine, depth))
+                htmlElements.push(createElement(i, stringLine, depth, config))
                 stringLine = ''
                 depth++
                 continue
             }
 
             if (prevChar === ']') {
-                htmlElements.push(createElement(i, stringLine, depth))
+                htmlElements.push(createElement(i, stringLine, depth, config))
                 stringLine = ''
                 depth--
                 continue
             }
 
             if (prevChar === '{') {
-                htmlElements.push(createElement(i, stringLine, depth))
+                htmlElements.push(createElement(i, stringLine, depth, config))
                 stringLine = ''
                 depth++
                 continue
             }
 
             if (prevChar === '}') {
-                htmlElements.push(createElement(i, stringLine, depth))
+                htmlElements.push(createElement(i, stringLine, depth, config))
                 stringLine = ''
                 depth--
                 continue
             }
 
             if (prevChar !== ',') {
-                htmlElements.push(createElement(i, stringLine, depth))
+                htmlElements.push(createElement(i, stringLine, depth, config))
                 stringLine = ''
                 depth--
                 continue
@@ -138,4 +74,120 @@ export const createElements = (jsonData: any): JSX.Element[] => {
     }
 
     return htmlElements
+}
+
+const createElement = (index: number, stringLine: string, depth: number, config: Config): JSX.Element => {
+
+    const highlightedElements: JSX.Element[] = []
+    const chunks = breakString(stringLine)
+
+    chunks?.forEach((chunk, index) => {
+
+        if (isKey(chunk)) {
+
+            // Color json keys
+            const hlElement =
+                <span
+                    key={index}
+                    style={{ color: config.highlightColors.key }}
+                    className='sjd-key'>
+                    {chunk.slice(0, -2)}
+                    <span className='sjd-punct'>: </span>
+                </span>;
+
+            highlightedElements.push(hlElement);
+
+        } else if (isString(chunk)) {
+
+            // Color json string values
+            const hlElement =
+                <span
+                    key={index}
+                    style={{ color: config.highlightColors.stringValue }}
+                    className='sjd-string'>
+                    {chunk}
+                </span>;
+
+            highlightedElements.push(hlElement);
+
+        } else if (isNumber(chunk)) {
+
+            // Color json numbers
+            const hlElement =
+                <span
+                    key={index}
+                    style={{ color: config.highlightColors.numberValue }}
+                    className='sjd-number'>
+                    {chunk}
+                </span>;
+
+            highlightedElements.push(hlElement);
+
+        } else if (isBoolean(chunk)) {
+
+            // Color json boolean values
+            const hlElement =
+                <span
+                    key={index}
+                    style={{ color: config.highlightColors.booleanValue }}
+                    className='sjd-boolean'>
+                    {chunk}
+                </span>;
+
+            highlightedElements.push(hlElement);
+
+        } else if (isBracket(chunk)) {
+
+            // Color json brackets
+            const hlElement =
+                <span
+                    key={index}
+                    style={{ color: config.highlightColors.bracket }}
+                    className='sjd-bracket'>
+                    {chunk}
+                </span>;
+
+            highlightedElements.push(hlElement);
+
+        } else if (isComma(chunk)) {
+
+            // Color json commas
+            const hlElement =
+                <span
+                    key={index}
+                    style={{ color: config.highlightColors.punctuation }}
+                    className='sjd-punct'>
+                    {chunk}
+                </span>;
+
+            highlightedElements.push(hlElement);
+
+        } else if (isNull(chunk)) {
+
+            // Color json null values
+            const hlElement =
+                <span
+                    key={index}
+                    style={{ color: config.highlightColors.null }}
+                    className='sjd-null'>
+                    {chunk}
+                </span>;
+
+            highlightedElements.push(hlElement);
+        }
+    });
+
+    // Add indentation to each line according to the depth
+    const spaces = Array.from({ length: depth }, (_, index) => (
+        <span
+            key={index} style={{ borderLeft: config.showIndentGuides ? '1px solid rgba(255, 255, 255, 0.07)'  : 'none' }}>
+            {'\u00A0'.repeat(config.indentSpace)}
+        </span>
+    ));
+
+    return (
+        <div key={index} className="sjd-string-line">
+            {spaces}{highlightedElements}
+        </div>
+    )
 }

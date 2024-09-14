@@ -1,19 +1,23 @@
 export interface Config {
     indentSpace: number,
-    collapsible: boolean,
+    collapsible: boolean, //  not implemented
     showLineNumbers: boolean,
     showIndentGuides: boolean,
     layout: {
-        padding: number | string,
-        width: number | string,
-        height: number | string,
+        padding: number | string, 
         lineHeight?: number | string,
+    },
+    text: {
+        fontFamily: string,
+        fontSize: string,
+        fontWeight: number | string,
     },
     colors: {
         background: string,
         focusedRow: string,
+        warning: string,
     },
-    highlightColors: {
+    highlightColors: { 
         key: string,
         stringValue: string,
         numberValue: string,
@@ -31,13 +35,17 @@ export const defaultOptions = {
     showIndentGuides: true,
     layout: {
         padding: 40,
-        width: '100%',
-        height: '100%',
         lineHeight: '2rem',
+    },
+    text: {
+        fontFamily: 'monospace',
+        fontSize: '1rem',
+        fontWeight: 300,
     },
     colors: {
         background: '#242424',
         focusedRow: 'rgba(255, 255, 255, 0.02)',
+        warning: '#FF6347',
     },
     highlightColors: {
         key: '#F5F5F5',
@@ -45,7 +53,7 @@ export const defaultOptions = {
         numberValue: '#87CEFA',
         booleanValue: '#87CEFA',
         bracket: '#FF7F50',
-        punctuation: '#808080',
+        punctuation: 'rgba(255, 255, 255, 0.3)',
         null: '#87CEFA',
     }
 } as Config;
