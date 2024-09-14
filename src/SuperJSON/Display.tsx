@@ -1,7 +1,13 @@
 import { useEffect, useState } from 'react'
-import { createElements } from './components/elements'
+import { createJsonRow } from './components/elements'
+import CollapseButton from './components/collapse-button'
 import { Config, defaultOptions } from './lib/config'
 import './styles.css'
+
+interface RowElementData {
+    rowElement: JSX.Element,
+    type: string,
+}
 
 export default function SJDisplay(
     {
@@ -16,7 +22,7 @@ export default function SJDisplay(
 
     const [config, setConfig] = useState<Config>(defaultOptions)
     const [focusedRow, setFocusedRow] = useState<number | null>(null)
-    const [rowElements, setRowElements] = useState<JSX.Element[]>([])
+    const [rowElementData, setRowElementData] = useState<RowElementData[]>([])
 
     useEffect(() => {
         if (options) {
@@ -26,7 +32,7 @@ export default function SJDisplay(
             })
         }
 
-        setRowElements(createElements(json, config))
+        setRowElementData(createJsonRow(json, config))
     }, [options])
 
     return (
@@ -40,7 +46,7 @@ export default function SJDisplay(
                 fontWeight: config.text.fontWeight,
             }}>
 
-            {rowElements.map((element, i) => {
+            {rowElementData.map(({ rowElement, type }, i) => {
                 return (
                     <div
                         key={i}
@@ -64,10 +70,16 @@ export default function SJDisplay(
                         </div>
 
                         {/* Line content */}
-                        {element}
+                        {rowElement}
 
                         {/* Added components */}
-                        <div className='sjd-add-on' style={{ marginLeft: '1rem' }}>
+                        <div className='sjd-add-on' style={{ marginLeft: '6px' }}>
+                            <CollapseButton 
+                                visible={type === 'opening-sqbr' || type === 'opening-crlbr'}
+                                color={config.colors.collapseButtonIcon}
+                                bgColor={config.colors.collapseButtonBg}
+                                isCollapsed={false}
+                            />
                             {children}
                         </div>
                     </div>

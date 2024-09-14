@@ -1,8 +1,12 @@
 import { Config } from '../lib/config'
 import { isKey, isString, isNumber, isBoolean, isBracket, isComma, isNull, breakString } from '../lib/utils'
 
+interface RowElementData {
+    rowElement: JSX.Element,
+    type: string,
+}
 
-export const createElements = (jsonData: any, config: Config): JSX.Element[] => {
+export const createJsonRow = (jsonData: any, config: Config): RowElementData[] => {
 
     let jsonString = JSON.stringify(jsonData, null, 1)
 
@@ -10,13 +14,18 @@ export const createElements = (jsonData: any, config: Config): JSX.Element[] => 
     try {
         JSON.parse(jsonString)
     } catch (error) {
-        return [<p key="sjd-warning" style={{ color: config.colors.warning }}>Invalid JSON</p>]
+        return [
+            {
+                rowElement: <p key="sjd-warning" style={{ color: config.colors.warning }}>Invalid JSON</p>,
+                type: 'warning',
+            }
+        ]
     }
 
     // Prepare the string
     jsonString = jsonString.trim() + '\n'
 
-    const htmlElements: JSX.Element[] = []
+    const rowElementData: RowElementData[] = []
 
     let depth = 0;
     let stringLine = ''
@@ -31,41 +40,71 @@ export const createElements = (jsonData: any, config: Config): JSX.Element[] => 
         if (currentChar === '\n') {
 
             if (prevChar === ',') {
-                htmlElements.push(createElement(i, stringLine, depth, config))
+
+                const item = {
+                    rowElement: createElement(i, stringLine, depth, config),
+                    type: 'new-line',
+                }
+                rowElementData.push(item)
                 stringLine = ''
                 continue
             }
 
             if (prevChar === '[') {
-                htmlElements.push(createElement(i, stringLine, depth, config))
+
+                const item = {
+                    rowElement: createElement(i, stringLine, depth, config),
+                    type: 'opening-sqbr',
+                }
+                rowElementData.push(item)
                 stringLine = ''
                 depth++
                 continue
             }
 
             if (prevChar === ']') {
-                htmlElements.push(createElement(i, stringLine, depth, config))
+
+                const item = {
+                    rowElement: createElement(i, stringLine, depth, config),
+                    type: 'ending-sqbr',
+                }
+                rowElementData.push(item)
                 stringLine = ''
                 depth--
                 continue
             }
 
             if (prevChar === '{') {
-                htmlElements.push(createElement(i, stringLine, depth, config))
+
+                const item = {
+                    rowElement: createElement(i, stringLine, depth, config),
+                    type: 'opening-crlbr',
+                }
+                rowElementData.push(item)
                 stringLine = ''
                 depth++
                 continue
             }
 
             if (prevChar === '}') {
-                htmlElements.push(createElement(i, stringLine, depth, config))
+
+                const item = {
+                    rowElement: createElement(i, stringLine, depth, config),
+                    type: 'ending-crlbr',
+                }
+                rowElementData.push(item)
                 stringLine = ''
                 depth--
                 continue
             }
 
             if (prevChar !== ',') {
-                htmlElements.push(createElement(i, stringLine, depth, config))
+
+                const item = {
+                    rowElement: createElement(i, stringLine, depth, config),
+                    type: 'neutral',
+                }
+                rowElementData.push(item)
                 stringLine = ''
                 depth--
                 continue
@@ -73,7 +112,7 @@ export const createElements = (jsonData: any, config: Config): JSX.Element[] => 
         }
     }
 
-    return htmlElements
+    return rowElementData
 }
 
 const createElement = (index: number, stringLine: string, depth: number, config: Config): JSX.Element => {
@@ -89,12 +128,9 @@ const createElement = (index: number, stringLine: string, depth: number, config:
             const hlElement =
                 <span
                     key={index}
-                    style={{ color: config.highlightColors.key }}
-                    className='sjd-key'>
+                    style={{ color: config.highlightColors.key }}>
                     {chunk.slice(0, -2)}
-                    <span
-                        style={{ color: config.highlightColors.punctuation }}
-                        className='sjd-punct'>: </span>
+                    <span style={{ color: config.highlightColors.punctuation }}>: </span>
                 </span>;
 
             highlightedElements.push(hlElement);
@@ -105,8 +141,7 @@ const createElement = (index: number, stringLine: string, depth: number, config:
             const hlElement =
                 <span
                     key={index}
-                    style={{ color: config.highlightColors.stringValue }}
-                    className='sjd-string'>
+                    style={{ color: config.highlightColors.stringValue }}>
                     {chunk}
                 </span>;
 
@@ -118,8 +153,7 @@ const createElement = (index: number, stringLine: string, depth: number, config:
             const hlElement =
                 <span
                     key={index}
-                    style={{ color: config.highlightColors.numberValue }}
-                    className='sjd-number'>
+                    style={{ color: config.highlightColors.numberValue }}>
                     {chunk}
                 </span>;
 
@@ -131,8 +165,7 @@ const createElement = (index: number, stringLine: string, depth: number, config:
             const hlElement =
                 <span
                     key={index}
-                    style={{ color: config.highlightColors.booleanValue }}
-                    className='sjd-boolean'>
+                    style={{ color: config.highlightColors.booleanValue }}>
                     {chunk}
                 </span>;
 
@@ -144,8 +177,7 @@ const createElement = (index: number, stringLine: string, depth: number, config:
             const hlElement =
                 <span
                     key={index}
-                    style={{ color: config.highlightColors.bracket }}
-                    className='sjd-bracket'>
+                    style={{ color: config.highlightColors.bracket }}>
                     {chunk}
                 </span>;
 
@@ -157,8 +189,7 @@ const createElement = (index: number, stringLine: string, depth: number, config:
             const hlElement =
                 <span
                     key={index}
-                    style={{ color: config.highlightColors.punctuation }}
-                    className='sjd-punct'>
+                    style={{ color: config.highlightColors.punctuation }}>
                     {chunk}
                 </span>;
 

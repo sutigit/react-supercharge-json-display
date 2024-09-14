@@ -38,6 +38,16 @@
     gap: 1rem;
 }
 
+.sjd-collapse-button {
+    width: 16px;
+    height: 16px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
 #super-json-display span {
     white-space: pre-wrap;
     height: 100%;

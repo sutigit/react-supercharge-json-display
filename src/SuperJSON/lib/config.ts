@@ -17,6 +17,8 @@ export interface Config {
         focusedRow: string,
         rowNumber: string,
         indentLines: string,
+        collapseButtonIcon: string,
+        collapseButtonBg: string,
         warning: string,
     },
     highlightColors: { 
@@ -49,6 +51,8 @@ export const defaultOptions = {
         focusedRow: 'rgba(255, 255, 255, 0.02)',
         rowNumber: 'rgba(255, 255, 255, 0.18)',
         indentLines: 'rgba(255, 255, 255, 0.08)',
+        collapseButtonIcon: 'rgba(255, 255, 255, 0.24)',
+        collapseButtonBg: 'rgba(255, 255, 255, 0.08)',
         warning: '#FF6347',
     },
     highlightColors: {
