@@ -112,6 +112,8 @@
         "first": "https://lotrapi.co/api/v1/realms?page=1",
         "last": "https://lotrapi.co/api/v1/realms?page=1",
         "prev": null,
-        "next": null
+        "next": null,
+        "boolean": true,
+        "booleanfalse": false
     }
 }
