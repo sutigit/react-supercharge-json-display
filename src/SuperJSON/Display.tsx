@@ -83,11 +83,13 @@ export default function SJDisplay(
     }, [rowElementData])
 
 
-    const updateCollapseRanges = (collapseIndex: number) => {
+    // Mutate collapseRanges object
+    const updateCollapseRanges = (collapseIndex: number): void => {
         collapseRanges.current[collapseIndex.toString()].collapsed = !collapseRanges.current[collapseIndex.toString()].collapsed
     }
 
-    const handleCollapse = (collapseIndex: number) => {
+    // Mutate rowElementData object
+    const handleCollapse = (collapseIndex: number): void => {
 
         // Set new collapsed value for rowElements with collapseRanges
         updateCollapseRanges(collapseIndex)
@@ -134,7 +136,6 @@ export default function SJDisplay(
 
                 // Open the row element
                 rowElementDataCopy[i].collapsed = false;
-
             }
         }
 
@@ -152,7 +153,7 @@ export default function SJDisplay(
                 fontWeight: config.text.fontWeight,
             }}>
 
-            {rowElementData.map(({ rowElement, type, collapsed }, i) => {
+            {initialized && rowElementData.map(({ rowElement, type, collapsed }, i) => {
                 return (
                     <div
                         key={i}
@@ -160,7 +161,7 @@ export default function SJDisplay(
                         onMouseEnter={() => setFocusedRow(i)}
                         onMouseLeave={() => setFocusedRow(null)}
                         style={{
-                            backgroundColor: focusedRow === i ? config.colors.focusedRow : 'transparent',
+                            backgroundColor: (focusedRow === i || collapseRanges?.current[i]?.collapsed) ? config.colors.focusedRow : 'transparent',
                             height: collapsed ? 0 : config.layout.lineHeight,
                             maxHeight: config.layout.lineHeight,
                         }}>
@@ -183,9 +184,11 @@ export default function SJDisplay(
                             <CollapseButton
                                 visible={type === 'opening-sqbr' || type === 'opening-crlbr'}
                                 onClick={() => handleCollapse(i)}
-                                color={config.colors.collapseButtonIcon}
-                                bgColor={config.colors.collapseButtonBg}
-                                isCollapsed={collapsed}
+                                color={config.colors.openIcon}
+                                collapsedColor={config.colors.closedIcon}
+                                bgColor={config.colors.openBg}
+                                collapsedBgColor={config.colors.closedBg}
+                                isCollapsed={collapseRanges?.current[i]?.collapsed}
                             />
                             {children}
                         </div>
