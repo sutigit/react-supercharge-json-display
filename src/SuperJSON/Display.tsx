@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createJsonRow } from './components/elements'
 import CollapseButton from './components/collapse-button'
 import { Config, defaultOptions } from './lib/config'
@@ -11,13 +11,10 @@ interface RowElementData {
     collapsed: boolean
 }
 
-type RowElementDataObject<Key extends string> = {
-    [key in Key]: RowElementData
-};
-
 interface CollapseRange {
     end: number | null,
     collapsed: boolean,
+    depth: number,
 };
 
 type CollapseRangeObject<Key extends string> = {
@@ -38,10 +35,16 @@ export default function SJDisplay(
     const [config, setConfig] = useState<Config>(defaultOptions)
     const [focusedRow, setFocusedRow] = useState<number | null>(null)
     const [rowElementData, setRowElementData] = useState<RowElementData[]>([])
-    const [collapseRanges, setCollapseRanges] = useState<CollapseRangeObject<string>>({})
+
+    const [initialized, setInitialized] = useState<boolean>(false)
+    const collapseRanges = useRef<CollapseRangeObject<string>>({})
 
 
+    // Map JSON to JSX
     useEffect(() => {
+        setInitialized(false)
+
+        // Update style configurations
         if (options) {
             setConfig({
                 ...config,
@@ -52,13 +55,14 @@ export default function SJDisplay(
         setRowElementData(createJsonRow(json, config))
     }, [options])
 
+    // Map collapse ranges only once on component initialization
     useEffect(() => {
-        if (rowElementData.length === 0) return
+        if (initialized || rowElementData.length === 0) return
 
         const collectedCollapseRanges: CollapseRangeObject<string> = {}
         const currentCollapseRangeStartIndexes: number[] = [];
 
-        rowElementData.forEach(({ type }, i) => {
+        rowElementData.forEach(({ type, depth }, i) => {
             if (type === 'opening-sqbr' || type === 'opening-crlbr') {
 
                 currentCollapseRangeStartIndexes.push(i)
@@ -66,6 +70,7 @@ export default function SJDisplay(
                 collectedCollapseRanges[i] = {
                     end: null,
                     collapsed: false,
+                    depth: depth
                 }
             } else if (type === 'closing-sqbr' || type === 'closing-crlbr') {
                 collectedCollapseRanges[currentCollapseRangeStartIndexes[currentCollapseRangeStartIndexes.length - 1].toString()].end = i
@@ -73,21 +78,67 @@ export default function SJDisplay(
             }
         })
 
-        setCollapseRanges(collectedCollapseRanges)
+        collapseRanges.current = collectedCollapseRanges
+        setInitialized(true)
     }, [rowElementData])
 
-    useEffect(() => {
-        if (Object.keys(collapseRanges).length === 0) return
 
-    }, [collapseRanges])
+    const updateCollapseRanges = (collapseIndex: number) => {
+        collapseRanges.current[collapseIndex.toString()].collapsed = !collapseRanges.current[collapseIndex.toString()].collapsed
+    }
 
     const handleCollapse = (collapseIndex: number) => {
-        const collapseRange = collapseRanges[collapseIndex.toString()];
-        if (collapseRange.end !== null) {
-            for (let i = collapseIndex+1; i < collapseRange.end; i++) {
-                rowElementData[i].collapsed = !rowElementData[i].collapsed;
+
+        // Set new collapsed value for rowElements with collapseRanges
+        updateCollapseRanges(collapseIndex)
+
+        // Copy new rowElementData
+        const rowElementDataCopy = [...rowElementData];
+
+        let current: CollapseRange = collapseRanges.current[collapseIndex]
+
+        if (current.end === null) return
+
+        // Handle closing rows
+        if (current.collapsed === true) {
+            for (let i = collapseIndex + 1; i < current.end; i++) {
+
+                // Close the row element
+                rowElementDataCopy[i].collapsed = true;
             }
         }
+
+        // handle opening rows
+        if (current.collapsed === false) {
+
+            let skipRange: number = 0;
+            let skipDepth: number = 0;
+
+            // Go through each row starting from collapseIndex
+            for (let i = collapseIndex + 1; i < current.end; i++) {
+
+                if (skipRange > 0) {
+                    skipRange--
+
+                    // if row is in skip range and depth, then skip the loop
+                    if (rowElementDataCopy[i].depth > skipDepth) {
+                        continue
+                    }
+                }
+
+                // If a nested object is collapsed, set range and depth of the nested object for skipping
+                if (collapseRanges.current[i]?.collapsed === true) {
+                    skipRange = collapseRanges.current[i].end! - i
+                    skipDepth = collapseRanges.current[i].depth
+                }
+
+                // Open the row element
+                rowElementDataCopy[i].collapsed = false;
+
+            }
+        }
+
+        setRowElementData(rowElementDataCopy);
     }
 
     return (

@@ -8,10 +8,6 @@ interface RowElementData {
     collapsed: boolean
 }
 
-type RowElementDataObject<Key extends string> = {
-    [key in Key]: RowElementData
-};
-
 export const createJsonRow = (jsonData: any, config: Config): RowElementData[] => {
 
     let jsonString = JSON.stringify(jsonData, null, 1)
