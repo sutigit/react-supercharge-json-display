@@ -56,7 +56,7 @@ export const defaultOptions = {
         openIcon: 'rgba(255, 255, 255, 0.4)',
         closedIcon: 'rgba(255, 255, 255, 0.8)',
         openBg: 'rgba(255, 255, 255, 0.1)',
-        closedBg: 'rgba(135, 206, 250, 0.5)',
+        closedBg: 'rgba(135, 206, 250, 0.6)',
         warning: '#FF6347',
     },
     highlightColors: {
