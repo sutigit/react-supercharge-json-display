@@ -21,7 +21,7 @@ type CollapseRangeObject<Key extends string> = {
     [key in Key]: CollapseRange
 };
 
-export default function SJDisplay(
+export default function View(
     {
         children,
         json,
